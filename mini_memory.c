@@ -8,7 +8,7 @@ typedef struct malloc_element {
   struct malloc_element *next;
 } malloc_element;
 
-malloc_element *malloc_list = NULL; // Contains all malloc element
+static malloc_element *malloc_list = NULL; // Contains all malloc element
 
 void *mini_calloc(int size_element, int number_element) {
   size_t total_size = size_element * number_element;

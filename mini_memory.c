@@ -74,3 +74,17 @@ void *mini_calloc(int size_element, int number_element) {
   }
   return allocated_memory;
 }
+
+void mini_free(void *ptr) {
+  malloc_element *current_element = malloc_list;
+
+  // Search for the given data block
+  while (current_element != NULL) {
+    if (current_element->memory_ptr == ptr) {
+      current_element->status = 0; // Mark it as free
+      return;
+    }
+    current_element = current_element->next;
+  }
+  printf("Error: Unable to free memory. Pointer not found.\n");
+}

@@ -13,6 +13,32 @@ static malloc_element *malloc_list = NULL; // Contains all malloc element
 void *mini_calloc(int size_element, int number_element) {
   size_t total_size = size_element * number_element;
 
+  malloc_element *current = malloc_list;
+
+  // Looks for a free data block with enough space
+  while (current != NULL) {
+    if (current->status == 0 && current->size >= total_size) {
+      current->status = 1;
+
+      // Re-initialize memory to '\0'
+      for (size_t i = 0; i < current->size; i++) {
+        *(char *)(current->memory_ptr + i) = '\0';
+      }
+
+      // Check if Re-initialisation went as expected
+      for (size_t i = 0; i < current->size; i++) {
+        if (*(char *)(current->memory_ptr + i) != '\0') {
+          printf("Memory check failed at index %zu: value is %d, expected 0\n",
+                 i, *(char *)(current->memory_ptr + i));
+          return NULL;
+        }
+      }
+
+      return current->memory_ptr;
+    }
+    current = current->next;
+  }
+
   void *old_break = sbrk(0);
 
   void *allocated_memory = sbrk(size_element * number_element);

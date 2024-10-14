@@ -28,7 +28,6 @@ void *mini_calloc(int size_element, int number_element) {
 
   // Initialisation of memory to '\0'
   for (size_t i = 0; i < total_size; i++) {
-    // tab[i] = '\0';
     *(char *)(allocated_memory + i) = '\0';
   }
 

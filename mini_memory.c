@@ -114,3 +114,5 @@ void mini_free(void *ptr) {
   }
   printf("Error: Unable to free memory. Pointer not found.\n");
 }
+
+void mini_exit(void) { _exit(0); }

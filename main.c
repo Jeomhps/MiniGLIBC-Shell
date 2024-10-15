@@ -64,5 +64,5 @@ int main(int argc, char *argv[]) {
 
   printf("Every assertion succeeded !\n");
 
-  return EXIT_SUCCESS;
+  mini_exit();
 }

@@ -21,7 +21,7 @@ void mini_printf(char *str) {
     buffer[ind] = str[i];
     ind++;
     if (ind == BUF_SIZE || str[i] == '\n') {
-      syscall(SYS_write, STDOUT_FILENO, buffer, ind + 1);
+      syscall(SYS_write, STDOUT_FILENO, buffer, ind);
       ind = 0;
       memset(buffer, 0, BUF_SIZE);
     }

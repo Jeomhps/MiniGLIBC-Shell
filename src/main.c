@@ -64,5 +64,20 @@ int main(int argc, char *argv[]) {
 
   printf("Every assertion succeeded !\n");
 
+  /*char *str = "Bonjour le monde \ntata \ntoto \nbonjour";
+  mini_printf(str);
+  mini_printf("\ntest \n");*/
+
+  mini_printf("Hello world");
+
+  // Used for testing purpose to understand how to flush the buffer
+  // May be interesting to write a note about this
+  /*while (*str) {
+    putchar(*str);
+    str++;
+  }
+
+  fflush(stdout); */
+
   mini_exit();
 }

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "mini_lib.h"
+
 typedef struct malloc_element {
   void *memory_ptr;
   size_t size;
@@ -115,4 +117,7 @@ void mini_free(void *ptr) {
   printf("Error: Unable to free memory. Pointer not found.\n");
 }
 
-void mini_exit(void) { _exit(0); }
+void mini_exit(void) {
+  mini_exit_printf();
+  _exit(0);
+}

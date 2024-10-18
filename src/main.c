@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
   mini_printf(str);
   mini_printf("\ntest \n");*/
 
-  mini_printf("Hello world");
+  mini_printf("Hello world \n");
 
   // Used for testing purpose to understand how to flush the buffer
   // May be interesting to write a note about this

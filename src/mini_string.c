@@ -19,19 +19,17 @@ void mini_printf(char *str) {
 
   while (str[i]) {
     buffer[ind] = str[i];
-    // ind++;
+    ind++;
     if (ind == BUF_SIZE || str[i] == '\n') {
       syscall(SYS_write, STDOUT_FILENO, buffer, ind + 1);
       ind = 0;
       memset(buffer, 0, BUF_SIZE);
     }
-    ind++;
     i++;
   }
 }
 
 void mini_exit_printf(void) {
-  // ici faire les instructions d'exit;
   if (ind > 0) {
     syscall(SYS_write, STDOUT_FILENO, buffer, ind);
     memset(buffer, 0, ind); // Réinitialiser le tampon après écriture

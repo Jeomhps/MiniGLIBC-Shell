@@ -1,5 +1,8 @@
+#include <stdio.h>
 #include <string.h>
+#include <sys/ioctl.h>
 #include <sys/syscall.h>
+// #include <termios.h>
 #include <unistd.h>
 
 #include "mini_lib.h"
@@ -41,7 +44,16 @@ int mini_scanf(char *buffer, int buffer_size) {
     c = '\0'; // Discard the character
   }
 
+  // ioctl(STDIN_FILENO, TCFLSH, TCIFLUSH);
   return (int)chars_read; // Cast to int and return
+}
+
+int mini_strlen(char *s) {
+  int size = 0;
+  while (*s++) {
+    size++;
+  }
+  return size;
 }
 
 void mini_exit_printf(void) {

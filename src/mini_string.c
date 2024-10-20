@@ -15,17 +15,15 @@ void mini_printf(char *str) {
     ind = 0;
   }
 
-  int i = 0;
-
-  while (str[i]) {
-    buffer[ind] = str[i];
-    ind++;
-    if (ind == BUF_SIZE || str[i] == '\n') {
+  while (*str) {
+    buffer[ind++] = *str;
+    // ind++;
+    if (ind == BUF_SIZE || *str == '\n') {
       syscall(SYS_write, STDOUT_FILENO, buffer, ind);
       ind = 0;
       memset(buffer, 0, BUF_SIZE);
     }
-    i++;
+    str++;
   }
 }
 

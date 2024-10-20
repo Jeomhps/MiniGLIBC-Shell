@@ -8,6 +8,7 @@ void mini_exit(void);
 void mini_printf(char *str);
 int mini_scanf(char *buffer, int buffer_size);
 int mini_strlen(char *str);
+int mini_strcpy(char *s, char *d);
 void mini_exit_printf(void);
 
 #endif // !MINI_LIB.H

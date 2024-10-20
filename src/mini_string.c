@@ -56,6 +56,20 @@ int mini_strlen(char *s) {
   return size;
 }
 
+int mini_strcpy(char *s, char *d) {
+  int count = 0;
+  while (s[count]) {
+    d[count] = s[count];
+    count++;
+  }
+
+  for (int i = count; i < mini_strlen(d); i++) {
+    d[i] = '\0';
+  }
+
+  return count;
+}
+
 void mini_exit_printf(void) {
   if (ind > 0) {
     syscall(SYS_write, STDOUT_FILENO, buffer, ind);

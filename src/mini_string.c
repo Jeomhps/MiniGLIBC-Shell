@@ -27,6 +27,18 @@ void mini_printf(char *str) {
   }
 }
 
+int mini_scanf(char *buffer, int buffer_size) {
+  char c;
+  size_t chars_read = 0;
+
+  while (read(STDIN_FILENO, &c, 1) > 0 && chars_read < buffer_size - 1) {
+    *buffer++ = c;
+    chars_read++;
+  }
+
+  return (int)chars_read; // Cast to int and return
+}
+
 void mini_exit_printf(void) {
   if (ind > 0) {
     syscall(SYS_write, STDOUT_FILENO, buffer, ind);

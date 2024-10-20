@@ -79,5 +79,11 @@ int main(int argc, char *argv[]) {
 
   fflush(stdout); */
 
+  char *myBuf = (char *)mini_calloc(sizeof(char), 13);
+
+  mini_scanf(myBuf, 13);
+
+  mini_printf(myBuf);
+
   mini_exit();
 }

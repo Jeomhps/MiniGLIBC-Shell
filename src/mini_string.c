@@ -32,7 +32,7 @@ void mini_printf(char *str) {
 
 int mini_scanf(char *buffer, int buffer_size) {
   char c;
-  size_t chars_read = 0;
+  size_t chars_read = 1; // chars_read start at 1
 
   while (read(STDIN_FILENO, &c, 1) > 0 && chars_read < buffer_size - 1) {
     *buffer++ = c;

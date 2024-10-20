@@ -36,6 +36,11 @@ int mini_scanf(char *buffer, int buffer_size) {
     chars_read++;
   }
 
+  // Flush the overflow by reading all remaining characters from standard input
+  while (read(STDIN_FILENO, &c, 1) > 0 && c != '\n') {
+    c = '\0'; // Discard the character
+  }
+
   return (int)chars_read; // Cast to int and return
 }
 

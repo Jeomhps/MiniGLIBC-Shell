@@ -1,8 +1,7 @@
-#include <stdio.h>
+#include <errno.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/syscall.h>
-// #include <termios.h>
 #include <unistd.h>
 
 #include "mini_lib.h"
@@ -11,6 +10,9 @@
 
 static char *buffer = NULL;
 static int ind = -1;
+
+// extern const char *const _sys_errlist[];
+// extern int errno;
 
 void mini_printf(char *str) {
   if (ind == -1) {
@@ -32,7 +34,7 @@ void mini_printf(char *str) {
 
 int mini_scanf(char *buffer, int buffer_size) {
   char c;
-  size_t chars_read = 1; // chars_read start at 1
+  int chars_read = 1; // chars_read start at 1
 
   while (read(STDIN_FILENO, &c, 1) > 0 && chars_read < buffer_size - 1) {
     *buffer++ = c;
@@ -81,10 +83,52 @@ int mini_strcmp(char *s1, char *s2) {
   return 0;
 }
 
+void mini_perror(char *message) {
+  mini_printf(message);
+  mini_printf(" : ");
+  char buffer[20];
+  itoa(errno, buffer);
+  mini_printf(buffer);
+  mini_printf("\n");
+}
+
+void itoa(int n, char *buffer) {
+  int i = 0;
+  int isNeg = 0;
+
+  if (n == 0) {
+    buffer[i++] = '0';
+    buffer[i] = '\0';
+    return;
+  }
+
+  if (n < 0) {
+    isNeg = 1;
+    n = -n;
+  }
+
+  while (n != 0) {
+    buffer[i++] = (n % 10) + '0';
+    n /= 10;
+  }
+
+  if (isNeg) {
+    buffer[i++] = '-';
+  }
+
+  buffer[i] = '\0';
+
+  for (int j = 0; j < i / 2; j++) {
+    char temp = buffer[j];
+    buffer[j] = buffer[i - j - 1];
+    buffer[i - j - 1] = temp;
+  }
+}
+
 void mini_exit_printf(void) {
   if (ind > 0) {
     syscall(SYS_write, STDOUT_FILENO, buffer, ind);
-    memset(buffer, 0, ind); // Réinitialiser le tampon après écriture
+    memset(buffer, 0, ind);
     ind = 0;
   }
 }

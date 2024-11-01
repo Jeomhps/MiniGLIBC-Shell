@@ -79,24 +79,35 @@ int main(int argc, char *argv[]) {
 
   fflush(stdout); */
 
-  char *myBuf = (char *)mini_calloc(sizeof(char), 6);
+  char *myBuf = (char *)mini_calloc(sizeof(char), 5);
 
-  mini_scanf(myBuf, 6);
+  // mini_scanf(myBuf, 6);
 
   // mini_printf(myBuf);
   // mini_printf("\n");
   // printf("%i\n", mini_strlen(myBuf));
 
-  char *s = "oui";
+  // char *s = "oui";
 
-  printf("%i\n", mini_strlen(s));
-  mini_strcpy(s, myBuf);
+  // printf("%i\n", mini_strlen(s));
+  // mini_strcpy(s, myBuf);
+  // mini_printf(myBuf);
+
+  // mini_printf("\n");
+
+  // int test = mini_strcmp("oui", "ooi");
+  // printf("%i\n", test);
+
+  // mini_perror("bonjour");
+
+  int i = -132;
+
+  itoa(i, myBuf);
+
   mini_printf(myBuf);
-
   mini_printf("\n");
 
-  int test = mini_strcmp("oui", "ooi");
-  printf("%i\n", test);
+  mini_perror("test");
 
   mini_exit();
 }

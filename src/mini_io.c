@@ -44,7 +44,7 @@ MYFILE *mini_fopen(char *file, char mode) {
     break;
   default:
     mini_free(myFile);
-    errno = EINVAL; // Set errno to invalid args
+    errno = EINVAL;
     return NULL;
   }
 
@@ -84,7 +84,7 @@ int mini_fread(void *buffer, int size_element, int number_element,
       int read_result = read(file->fd, file->buffer_read, IOBUFFER_SIZE);
       if (read_result < 0) {
         return -1;
-      } else if (read_result == 0) {
+      } else if (read_result == 0) { // Special case where read attains EOF
         break;
       }
 
@@ -143,4 +143,25 @@ int mini_fwrite(void *buffer, int size_element, int number_element,
   }
 
   return bWritten / size_element;
+}
+
+int mini_fflush(MYFILE *file) {
+  if (file == NULL) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (file->buffer_write == NULL) {
+    errno = ENOMEM;
+    return -1;
+  }
+
+  int write_result = write(file->fd, file->buffer_write, file->ind_write);
+  if (write_result == -1) {
+    return -1;
+  }
+
+  file->ind_write = 0;
+
+  return write_result;
 }

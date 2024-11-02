@@ -70,6 +70,7 @@ int mini_fread(void *buffer, int size_element, int number_element,
     if (file->buffer_read == NULL) {
       return -1;
     }
+
     file->ind_read = 0;
   }
 
@@ -86,11 +87,13 @@ int mini_fread(void *buffer, int size_element, int number_element,
       } else if (read_result == 0) {
         break;
       }
+
       file->ind_read = 0;
     }
 
     if (file->ind_read < IOBUFFER_SIZE) {
       *dest = src[file->ind_read];
+
       dest++;
       file->ind_read++;
       bRead++;
@@ -98,4 +101,46 @@ int mini_fread(void *buffer, int size_element, int number_element,
   }
 
   return bRead / size_element;
+}
+
+int mini_fwrite(void *buffer, int size_element, int number_element,
+                MYFILE *file) {
+  if (file == NULL || file->fd < 0 || buffer == NULL || size_element <= 0 ||
+      number_element <= 0) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (file->buffer_write == NULL) {
+    file->buffer_write = mini_calloc(1, IOBUFFER_SIZE);
+    if (file->buffer_write == NULL) {
+      return -1;
+    }
+
+    file->ind_write = 0;
+  }
+
+  int bToWrite = size_element * number_element;
+  int bWritten = 0;
+  char *src = (char *)buffer;
+  char *dest = (char *)file->buffer_write;
+
+  while (bWritten < bToWrite) {
+    dest[file->ind_write] = *src;
+
+    src++;
+    file->ind_write++;
+    bWritten++;
+
+    if (file->ind_write >= IOBUFFER_SIZE) {
+      int write_result = write(file->fd, file->buffer_write, IOBUFFER_SIZE);
+      if (write_result < 0) {
+        return -1;
+      }
+
+      file->ind_write = 0;
+    }
+  }
+
+  return bWritten / size_element;
 }

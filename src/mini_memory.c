@@ -119,5 +119,6 @@ void mini_free(void *ptr) {
 
 void mini_exit(void) {
   mini_exit_printf();
+  mini_io_exit();
   _exit(0);
 }

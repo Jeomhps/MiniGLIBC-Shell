@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -16,10 +17,27 @@ struct MYFILE {
   int ind_write;
 };
 
+typedef struct MYFILE_NODE {
+  MYFILE *file;
+  struct MYFILE_NODE *next;
+} MYFILE_NODE;
+
+MYFILE_NODE *myFileList = NULL;
+
+int add_file_to_list(MYFILE *file);
+
 MYFILE *mini_fopen(char *file, char mode) {
   MYFILE *myFile = (MYFILE *)mini_calloc(sizeof(MYFILE), 1);
 
   if (myFile == NULL) {
+    return NULL;
+  }
+
+  int failed = add_file_to_list(myFile);
+
+  if (failed == 0) {
+    mini_free(myFile);
+    errno = EIO;
     return NULL;
   }
 
@@ -164,4 +182,32 @@ int mini_fflush(MYFILE *file) {
   file->ind_write = 0;
 
   return write_result;
+}
+
+int add_file_to_list(MYFILE *file) {
+  MYFILE_NODE *new_node = (MYFILE_NODE *)mini_calloc(sizeof(MYFILE_NODE), 1);
+  if (new_node == NULL) {
+    return 0;
+  }
+
+  new_node->file = file;
+  new_node->next = myFileList;
+  myFileList = new_node;
+
+  return 42;
+}
+
+void mini_io_exit(void) {
+  MYFILE_NODE *current = myFileList;
+  while (current != NULL) {
+    MYFILE *file = current->file;
+    if (file != NULL && file->buffer_write != NULL && file->ind_write > 0) {
+      mini_fflush(file);
+    }
+
+    MYFILE_NODE *to_free = current;
+    current = current->next;
+    mini_free(to_free->file);
+    mini_free(to_free);
+  }
 }

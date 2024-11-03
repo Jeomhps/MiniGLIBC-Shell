@@ -197,12 +197,67 @@ int add_file_to_list(MYFILE *file) {
   return 42;
 }
 
+int del_file_from_list(MYFILE *file) {
+  if (file == NULL || myFileList == NULL) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  MYFILE_NODE *current = myFileList;
+  MYFILE_NODE *previous = NULL;
+
+  while (current != NULL) {
+    if (current->file == file) {
+      if (previous == NULL) {
+        myFileList = current->next;
+      } else {
+        previous->next = current->next;
+      }
+
+      mini_free(current);
+      return 42;
+    }
+
+    previous = current;
+    current = current->next;
+  }
+
+  errno = ENOENT;
+  return -1;
+}
+
+int mini_fclose(MYFILE *file) {
+  if (file == NULL || myFileList == NULL) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  int del_result = del_file_from_list(file);
+  if (del_result == -1) {
+    return -1;
+  }
+
+  int mini_fflush_result = mini_fflush(file);
+  if (mini_fflush_result == -1) {
+    return -1;
+  }
+
+  int close_result = close(file->fd);
+  if (close_result == -1) {
+    return -1;
+  }
+
+  mini_free(file);
+
+  return 42;
+}
+
 void mini_io_exit(void) {
   MYFILE_NODE *current = myFileList;
   while (current != NULL) {
     MYFILE *file = current->file;
     if (file != NULL && file->buffer_write != NULL && file->ind_write > 0) {
-      mini_fflush(file);
+      mini_fclose(file);
     }
 
     MYFILE_NODE *to_free = current;

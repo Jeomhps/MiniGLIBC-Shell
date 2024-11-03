@@ -220,9 +220,9 @@ int main(int argc, char *argv[]) {
   mini_fputc(myfile2, 'c');
   mini_fputc(myfile2, EOF);
 
-  mini_exit();
+  mini_exit(0);
 
   return 0;
 
-  mini_exit();
+  mini_exit(0);
 }

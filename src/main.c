@@ -199,6 +199,7 @@ int main(int argc, char *argv[]) {
   printf("Nombre d'éléments écrits : %d\n", elements_written2);
 
   // mini_fflush(myfile);
+  mini_fclose(myfile);
   mini_exit();
 
   return 0;

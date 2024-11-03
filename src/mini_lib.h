@@ -1,9 +1,10 @@
 #ifndef MINI_LIB
 
+// Mini_memory.c
 void *mini_calloc(int size_element, int number_element);
 void mini_free(void *ptr);
 void *mini_memset(void *ptr, int value, int size);
-void mini_exit(void);
+void mini_exit(int status);
 
 // Function of stdio
 void mini_printf(char *str);

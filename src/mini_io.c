@@ -1,8 +1,5 @@
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <sys/errno.h>
+#include <sys/fcntl.h>
 #include <unistd.h>
 
 #include "mini_lib.h"
@@ -290,7 +287,7 @@ int mini_fgetc(MYFILE *file) {
     if (read_result < 0) {
       return -1;
     } else if (read_result == 0) {
-      return EOF;
+      return -1;
     }
 
     file->ind_read = 0;

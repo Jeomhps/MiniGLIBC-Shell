@@ -6,6 +6,9 @@
 #include "mini_lib.h"
 
 int main(int argc, char *argv[]) {
+  (void)argc;
+  (void)argv;
+
   // Allocated memory for my 3 arrays
   int *arr1 = (int *)mini_calloc(sizeof(int), 5);
   int *arr2 = (int *)mini_calloc(sizeof(int), 10);
@@ -115,7 +118,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  char buffer[4000];
+  // char buffer[4000];
   // int elements_read = mini_fread(buffer, 1, 4000, file);
   // if (elements_read < 0) {
   //   perror("Erreur lors de la lecture du fichier");

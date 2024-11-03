@@ -24,6 +24,7 @@ int mini_fwrite(void *buffer, int size_element, int number_element,
                 MYFILE *file);
 int mini_fflush(MYFILE *file);
 int mini_fclose(MYFILE *file);
+int mini_fgetc(MYFILE *file);
 void mini_io_exit(void);
 
 #endif // !MINI_LIB.H

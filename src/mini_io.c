@@ -275,6 +275,34 @@ int mini_fclose(MYFILE *file) {
   return 42;
 }
 
+int mini_fgetc(MYFILE *file) {
+  if (file == NULL || file->fd < 0) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (init_buffer(&(file->buffer_read), &(file->ind_read)) == -1) {
+    return -1;
+  }
+
+  if (file->ind_read >= IOBUFFER_SIZE || file->ind_read == 0) {
+    int read_result = read(file->fd, file->buffer_read, IOBUFFER_SIZE);
+    if (read_result < 0) {
+      return -1;
+    } else if (read_result == 0) {
+      return EOF;
+    }
+
+    file->ind_read = 0;
+  }
+
+  unsigned char character =
+      ((unsigned char *)file->buffer_read)[file->ind_read];
+  file->ind_read++;
+
+  return (int)character;
+}
+
 void mini_io_exit(void) {
   MYFILE_NODE *current = myFileList;
   while (current != NULL) {

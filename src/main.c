@@ -116,14 +116,14 @@ int main(int argc, char *argv[]) {
   }
 
   char buffer[4000];
-  int elements_read = mini_fread(buffer, 1, 4000, file);
-  if (elements_read < 0) {
-    perror("Erreur lors de la lecture du fichier");
-    return 1;
-  }
-
-  buffer[elements_read] = '\0';
-  printf("Contenu lu :\n%s\n", buffer);
+  // int elements_read = mini_fread(buffer, 1, 4000, file);
+  // if (elements_read < 0) {
+  //   perror("Erreur lors de la lecture du fichier");
+  //   return 1;
+  // }
+  //
+  // buffer[elements_read] = '\0';
+  // printf("Contenu lu :\n%s\n", buffer);
 
   mini_perror("oui");
 
@@ -199,6 +199,19 @@ int main(int argc, char *argv[]) {
   printf("Nombre d'éléments écrits : %d\n", elements_written2);
 
   // mini_fflush(myfile);
+  // char a[2];
+  // a[0] = mini_fgetc(file);
+  // a[1] = '\0';
+  char a[100];
+
+  for (int i = 0; i < 40; i++) {
+    a[i] = mini_fgetc(file);
+  }
+  a[40] = '\0';
+
+  mini_fflush(file);
+  mini_printf(a);
+  mini_printf("\n");
   mini_fclose(myfile);
   mini_exit();
 

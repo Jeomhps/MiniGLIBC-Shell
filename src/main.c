@@ -213,6 +213,13 @@ int main(int argc, char *argv[]) {
   mini_printf(a);
   mini_printf("\n");
   mini_fclose(myfile);
+
+  mini_fputc(myfile2, 'c');
+  mini_fputc(myfile2, EOF);
+  mini_fputc(myfile2, 'c');
+  mini_fputc(myfile2, 'c');
+  mini_fputc(myfile2, EOF);
+
   mini_exit();
 
   return 0;

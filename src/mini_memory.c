@@ -23,9 +23,11 @@ void *mini_calloc(int size_element, int number_element) {
       current->status = 1;
 
       // Re-initialize memory to '\0'
-      for (size_t i = 0; i < current->size; i++) {
-        *(char *)(current->memory_ptr + i) = '\0';
-      }
+      // for (size_t i = 0; i < current->size; i++) {
+      //   *(char *)(current->memory_ptr + i) = '\0';
+      // }
+
+      mini_memset(current->memory_ptr, '\0', total_size);
 
       // Check if Re-initialisation went as expected
       for (size_t i = 0; i < current->size; i++) {
@@ -88,9 +90,11 @@ void *mini_calloc(int size_element, int number_element) {
   }
 
   // Initialisation of memory to '\0'
-  for (size_t i = 0; i < total_size; i++) {
-    *(char *)(allocated_memory + i) = '\0';
-  }
+  // for (size_t i = 0; i < total_size; i++) {
+  //   *(char *)(allocated_memory + i) = '\0';
+  // }
+
+  mini_memset(allocated_memory, '\0', total_size);
 
   // Verifies that the initialisation went as planned
   for (size_t i = 0; i < total_size; i++) {
@@ -115,6 +119,14 @@ void mini_free(void *ptr) {
     current_element = current_element->next;
   }
   printf("Error: Unable to free memory. Pointer not found.\n");
+}
+
+void *mini_memset(void *ptr, int value, int size) {
+  unsigned char *p = (unsigned char *)ptr;
+  for (int i = 0; i < size; i++) {
+    p[i] = (unsigned char)value;
+  }
+  return ptr;
 }
 
 void mini_exit(void) {

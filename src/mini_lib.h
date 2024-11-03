@@ -2,6 +2,7 @@
 
 void *mini_calloc(int size_element, int number_element);
 void mini_free(void *ptr);
+void *mini_memset(void *ptr, int value, int size);
 void mini_exit(void);
 
 // Function of stdio

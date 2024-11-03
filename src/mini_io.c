@@ -300,7 +300,32 @@ int mini_fgetc(MYFILE *file) {
       ((unsigned char *)file->buffer_read)[file->ind_read];
   file->ind_read++;
 
-  return (int)character;
+  return character;
+}
+
+int mini_fputc(MYFILE *file, char c) {
+  if (file == NULL || file->fd < 0) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (init_buffer(&(file->buffer_write), &(file->ind_write)) == -1) {
+    return -1;
+  }
+
+  ((char *)file->buffer_write)[file->ind_write] = c;
+  file->ind_write++;
+
+  if (file->ind_write >= IOBUFFER_SIZE) {
+    int write_result = write(file->fd, file->buffer_write, IOBUFFER_SIZE);
+    if (write_result < 0) {
+      return -1;
+    }
+
+    file->ind_write = 0;
+  }
+
+  return (unsigned char)c;
 }
 
 void mini_io_exit(void) {

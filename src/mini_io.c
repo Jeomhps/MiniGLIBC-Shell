@@ -75,6 +75,17 @@ MYFILE *mini_fopen(char *file, char mode) {
   return myFile;
 }
 
+int init_buffer(void **buffer, int *index) {
+  if (*buffer == NULL) {
+    *buffer = mini_calloc(1, IOBUFFER_SIZE);
+    if (*buffer == NULL) {
+      return -1;
+    }
+    *index = 0;
+  }
+  return 0;
+}
+
 int mini_fread(void *buffer, int size_element, int number_element,
                MYFILE *file) {
   if (file == NULL || file->fd < 0 || buffer == NULL || size_element <= 0 ||
@@ -83,14 +94,20 @@ int mini_fread(void *buffer, int size_element, int number_element,
     return -1;
   }
 
-  if (file->buffer_read == NULL) {
-    file->buffer_read = mini_calloc(1, IOBUFFER_SIZE);
-    if (file->buffer_read == NULL) {
-      return -1;
-    }
-
-    file->ind_read = 0;
+  if (init_buffer(&(file->buffer_read), &(file->ind_read)) == -1) {
+    return -1;
   }
+
+  // Old code before deduplication :
+  //
+  // if (file->buffer_read == NULL) {
+  //   file->buffer_read = mini_calloc(1, IOBUFFER_SIZE);
+  //   if (file->buffer_read == NULL) {
+  //     return -1;
+  //   }
+  //
+  //   file->ind_read = 0;
+  // }
 
   int bToRead = size_element * number_element;
   int bRead = 0;
@@ -129,14 +146,20 @@ int mini_fwrite(void *buffer, int size_element, int number_element,
     return -1;
   }
 
-  if (file->buffer_write == NULL) {
-    file->buffer_write = mini_calloc(1, IOBUFFER_SIZE);
-    if (file->buffer_write == NULL) {
-      return -1;
-    }
-
-    file->ind_write = 0;
+  if (init_buffer(&(file->buffer_write), &(file->ind_write)) == -1) {
+    return -1;
   }
+
+  // Old code before deduplication :
+  //
+  // if (file->buffer_write == NULL) {
+  //   file->buffer_write = mini_calloc(1, IOBUFFER_SIZE);
+  //   if (file->buffer_write == NULL) {
+  //     return -1;
+  //   }
+  //
+  //   file->ind_write = 0;
+  // }
 
   int bToWrite = size_element * number_element;
   int bWritten = 0;

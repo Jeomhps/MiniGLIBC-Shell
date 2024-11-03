@@ -1,4 +1,3 @@
-#include <string.h>
 #include <sys/errno.h>
 #include <sys/ioctl.h>
 #include <sys/syscall.h>
@@ -8,25 +7,36 @@
 
 #define BUF_SIZE 1024
 
-static char *buffer = NULL;
-static int ind = -1;
-
-// extern const char *const _sys_errlist[];
-// extern int errno;
+char *buffer = NULL;
+int ind = -1;
 
 void mini_printf(char *str) {
+  if (str == NULL) {
+    errno = EINVAL;
+    return;
+  }
+
   if (ind == -1) {
     buffer = (char *)mini_calloc(sizeof(char), BUF_SIZE);
+    if (buffer == NULL) {
+      return;
+    }
+
     ind = 0;
   }
 
   while (*str) {
-    buffer[ind++] = *str;
-    // ind++;
+    buffer[ind] = *str;
+    ind++;
+
     if (ind == BUF_SIZE || *str == '\n') {
-      syscall(SYS_write, STDOUT_FILENO, buffer, ind);
+      int write_result = write(STDOUT_FILENO, buffer, ind);
+      if (write_result < 0) {
+        errno = EIO;
+      }
+
+      mini_memset(buffer, '\0', BUF_SIZE);
       ind = 0;
-      memset(buffer, 0, BUF_SIZE);
     }
     str++;
   }
@@ -47,40 +57,50 @@ int mini_scanf(char *buffer, int buffer_size) {
   }
 
   // ioctl(STDIN_FILENO, TCFLSH, TCIFLUSH);
-  return (int)chars_read; // Cast to int and return
+  return (int)chars_read;
 }
 
 int mini_strlen(char *s) {
+  if (s == NULL)
+    return 0;
+
   int size = 0;
   while (*s++) {
     size++;
   }
+
   return size;
 }
 
-int mini_strcpy(char *s, char *d) {
+int mini_strcpy(char *d, char *s) {
+  if (d == NULL || s == NULL)
+    return 0;
+
   int count = 0;
-  while (s[count]) {
+  while (s[count] != '\0') {
     d[count] = s[count];
     count++;
   }
 
-  for (int i = count; i < mini_strlen(d); i++) {
-    d[i] = '\0';
-  }
-
+  d[count] = '\0';
   return count;
 }
 
 int mini_strcmp(char *s1, char *s2) {
-  while (*s1) {
-    if (s1++ != s2++) {
-      return 1;
-    }
-    // s1++;
-    // s2++;
+  if (s1 == NULL && s2 == NULL) {
+    return 0;
+  } else if (s1 == NULL) {
+    return -1;
+  } else {
+    return 1;
   }
-  return 0;
+
+  while (*s1 && (*s1 == *s2)) {
+    s1++;
+    s2++;
+  }
+
+  return *(unsigned char *)s1 - *(unsigned char *)s2;
 }
 
 void mini_perror(char *message) {
@@ -127,8 +147,8 @@ void itoa(int n, char *buffer) {
 
 void mini_exit_printf(void) {
   if (ind > 0) {
-    syscall(SYS_write, STDOUT_FILENO, buffer, ind);
-    memset(buffer, 0, ind);
+    write(STDOUT_FILENO, buffer, ind);
+    mini_memset(buffer, '\0', ind);
     ind = 0;
   }
 }

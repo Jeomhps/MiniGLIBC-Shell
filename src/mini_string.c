@@ -31,7 +31,7 @@ void mini_printf(char *str) {
 
     if (ind == BUF_SIZE || *str == '\n') {
       int write_result = write(STDOUT_FILENO, buffer, ind);
-      if (write_result < 0) {
+      if (write_result < 0) { // Is it really necessary ?
         errno = EIO;
       }
 
@@ -56,6 +56,7 @@ int mini_scanf(char *buffer, int buffer_size) {
     c = '\0'; // Discard the character
   }
 
+  // Alternative I found, not sure if it is allowed
   // ioctl(STDIN_FILENO, TCFLSH, TCIFLUSH);
   return (int)chars_read;
 }
@@ -107,41 +108,43 @@ void mini_perror(char *message) {
   mini_printf(message);
   mini_printf(" : ");
   char buffer[20];
-  itoa(errno, buffer);
+  mini_itoa(errno, buffer);
   mini_printf(buffer);
   mini_printf("\n");
 }
 
-void itoa(int n, char *buffer) {
+void mini_itoa(int n, char *buffer) {
   int i = 0;
-  int isNeg = 0;
 
   if (n == 0) {
-    buffer[i++] = '0';
+    buffer[i] = '0';
+    i++;
     buffer[i] = '\0';
     return;
   }
 
-  if (n < 0) {
-    isNeg = 1;
+  int isNegative = n < 0;
+  if (isNegative) {
     n = -n;
   }
 
-  while (n != 0) {
-    buffer[i++] = (n % 10) + '0';
+  while (n > 0) {
+    buffer[i] = (n % 10) + '0';
+    i++;
     n /= 10;
   }
 
-  if (isNeg) {
-    buffer[i++] = '-';
+  if (isNegative) {
+    buffer[i] = '-';
+    i++;
   }
 
   buffer[i] = '\0';
 
-  for (int j = 0; j < i / 2; j++) {
-    char temp = buffer[j];
-    buffer[j] = buffer[i - j - 1];
-    buffer[i - j - 1] = temp;
+  for (int j = 0, k = i - 1; j < k; j++, k--) {
+    char tmp = buffer[j];
+    buffer[j] = buffer[k];
+    buffer[k] = tmp;
   }
 }
 

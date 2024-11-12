@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
 
   int i = -132;
 
-  itoa(i, myBuf);
+  mini_itoa(i, myBuf);
 
   mini_printf(myBuf);
   mini_printf("\n");

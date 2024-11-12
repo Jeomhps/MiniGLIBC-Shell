@@ -13,7 +13,7 @@ int mini_strlen(char *str);
 int mini_strcpy(char *s, char *d);
 int mini_strcmp(char *s1, char *s2);
 void mini_perror(char *message);
-void itoa(int n, char *buffer);
+void mini_itoa(int n, char *buffer);
 void mini_exit_printf(void);
 
 // stdio

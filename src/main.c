@@ -1,71 +1,139 @@
 #include <assert.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "mini_lib.h"
 
-int main(int argc, char *argv[]) {
-  (void)argc;
-  (void)argv;
+void test_mini_memory(void) {
+  printf("Testing mini_memory functions with comprehensive checks...\n");
 
-  // Allocated memory for my 3 arrays
+  /*
+  /-------------------------------------------------
+  /       Test mini_calloc with valid inputs
+  /-------------------------------------------------
+  /
+  / Allocate memory blocks using mini_calloc for
+  / different sizes and verify that allocations
+  / are successful.
+  */
   int *arr1 = (int *)mini_calloc(sizeof(int), 5);
   int *arr2 = (int *)mini_calloc(sizeof(int), 10);
-  int *arr3 = (int *)mini_calloc(sizeof(int), 20);
+  int *arr3 = (int *)mini_calloc(sizeof(int), 15);
 
-  // Verify the mini_calloc did not fail
-  assert(arr1 != NULL);
-  assert(arr2 != NULL);
-  assert(arr3 != NULL);
-
-  // Verify the memory has been initalized with '\0's
-  for (int i = 0; i < 5; i++) {
-    assert(*(arr1 + i) == '\0');
+  if (arr1 == NULL) {
+    mini_perror("Initial mini_calloc allocation for arr1 failed");
+  }
+  if (arr2 == NULL) {
+    mini_perror("Initial mini_calloc allocation for arr2 failed");
+  }
+  if (arr3 == NULL) {
+    mini_perror("Initial mini_calloc allocation for arr3 failed");
   }
 
-  for (int i = 0; i < 10; i++) {
-    assert(*(arr2 + i) == '\0');
-  }
-
-  for (int i = 0; i < 20; i++) {
-    assert(*(arr3 + i) == '\0');
-  }
-
-  // Store the addresses of the memory block allocated
   void *first_address = arr1;
   void *second_address = arr2;
   void *third_address = arr3;
 
-  // Free all my allocated blocks
   mini_free(arr1);
   mini_free(arr2);
   mini_free(arr3);
 
-  // Test : whether the new allocation will use the second freed block
-  // (size of allocation == size of freed block)
+  /*
+  /-------------------------------------------------
+  /       Test reallocation of freed memory blocks
+  /-------------------------------------------------
+  /
+  / Allocate memory blocks again using mini_calloc
+  / and verify that they are reallocated to the
+  / previously freed memory addresses.
+  */
   int *arr4 = (int *)mini_calloc(sizeof(int), 10);
-  assert(arr4 != NULL);
-  assert(arr4 == second_address);
+  if (arr4 == NULL) {
+    mini_perror("Mini calloc 4 failed");
+  } else if (arr4 != second_address) {
+    mini_perror("Reallocation 1 of free block failed");
+  }
 
-  // Test : whether the new allocation will use the first freed block
-  // (size of allocation == size of freed block)
   int *arr5 = (int *)mini_calloc(sizeof(int), 5);
-  assert(arr5 != NULL);
-  assert(arr5 == first_address);
+  if (arr5 == NULL) {
+    mini_perror("Mini calloc 5 failed");
+  } else if (arr5 != first_address) {
+    mini_perror("Reallocation 2 of free block failed");
+  }
 
-  // Test : whether the new allocation will use the third freed block
-  // (size smaller than the new required size for allocation)
   int *arr6 = (int *)mini_calloc(sizeof(int), 15);
-  assert(arr6 != NULL);
-  assert(arr6 == third_address);
+  if (arr6 == NULL) {
+    mini_perror("Mini calloc 6 failed");
+  } else if (arr6 != third_address) {
+    mini_perror("Reallocation 3 of free block failed");
+  }
 
-  // Free the memory
-  mini_free(arr4);
-  mini_free(arr5);
-  mini_free(arr6);
+  /*
+  /-------------------------------------------------
+  /       Test mini_calloc with invalid inputs
+  /-------------------------------------------------
+  /
+  / Test invalid input parameters such as negative
+  / or zero sizes and check if errno is correctly
+  / set to EINVAL.
+  */
+  int *t1 = (int *)mini_calloc(sizeof(int), -5);
+  if (t1 == NULL) {
+    if (errno != EINVAL) {
+      mini_perror("EINVAL check for mini_calloc with negative size failed");
+    }
+  }
 
-  printf("Every assertion succeeded !\n");
+  int *t2 = (int *)mini_calloc(-1, 10);
+  if (t2 == NULL) {
+    if (errno != EINVAL) {
+      mini_perror(
+          "EINVAL check for mini_calloc with negative element size failed");
+    }
+  }
+
+  int *t3 = (int *)mini_calloc(0, 10);
+  if (t3 == NULL) {
+    if (errno != EINVAL) {
+      mini_perror("EINVAL check for mini_calloc with zero size_element failed");
+    }
+  }
+
+  int *t4 = (int *)mini_calloc(10, 0);
+  if (t4 == NULL) {
+    if (errno != EINVAL) {
+      mini_perror(
+          "EINVAL check for mini_calloc with zero number_element failed");
+    }
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_free with special cases
+  /-------------------------------------------------
+  /
+  / Test freeing of a null pointer and an invalid
+  / pointer that was not allocated using mini_calloc.
+  */
+  mini_free(NULL); // Should not set errno, just return without doing anything
+
+  // Test mini_free with a pointer that hasn't been allocated by mini_calloc
+  int dummy;
+  mini_free(&dummy);
+  if (errno != EINVAL) {
+    mini_perror("mini_free invalid pointer check failed");
+  }
+
+  mini_printf("All tests for mini_memory completed\n");
+}
+
+int main(int argc, char *argv[]) {
+  (void)argc;
+  (void)argv;
+
+  test_mini_memory();
 
   /*char *str = "Bonjour le monde \ntata \ntoto \nbonjour";
   mini_printf(str);

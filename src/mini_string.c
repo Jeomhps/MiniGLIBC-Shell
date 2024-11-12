@@ -44,21 +44,27 @@ void mini_printf(char *str) {
 
 int mini_scanf(char *buffer, int buffer_size) {
   char c;
-  int chars_read = 1; // chars_read start at 1
+  int chars_read = 0;
 
-  while (read(STDIN_FILENO, &c, 1) > 0 && chars_read < buffer_size - 1) {
-    *buffer++ = c;
+  while (chars_read < buffer_size - 1) {
+    if (read(STDIN_FILENO, &c, 1) <= 0) {
+      break;
+    }
+    if (c == '\n') {
+      break;
+    }
+    *buffer = c;
+    buffer++;
     chars_read++;
   }
 
-  // Flush the overflow by reading all remaining characters from standard input
-  while (read(STDIN_FILENO, &c, 1) > 0 && c != '\n') {
-    c = '\0'; // Discard the character
+  *buffer = '\0';
+
+  while (c != '\n' && read(STDIN_FILENO, &c, 1) > 0) {
+    // Discard characters until newline
   }
 
-  // Alternative I found, not sure if it is allowed
-  // ioctl(STDIN_FILENO, TCFLSH, TCIFLUSH);
-  return (int)chars_read;
+  return chars_read;
 }
 
 int mini_strlen(char *s) {

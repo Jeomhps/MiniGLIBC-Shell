@@ -7,7 +7,7 @@
 #include "mini_lib.h"
 
 void test_mini_memory(void) {
-  printf("Testing mini_memory functions with comprehensive checks...\n");
+  printf("Testing mini_memory functions with comprehensive checks...\n\n");
 
   /*
   /-------------------------------------------------
@@ -131,6 +131,7 @@ void test_mini_memory(void) {
 
 void test_mini_string(void) {
   mini_printf("Testing mini_io and mini_string functions...\n");
+  mini_printf("\n");
 
   /*
   /-------------------------------------------------
@@ -142,6 +143,7 @@ void test_mini_string(void) {
   / that strings are correctly buffered and flushed.
   */
   mini_printf("Testing mini_printf: Hello, mini_lib!\n");
+  mini_printf("\n");
 
   /*
   /-------------------------------------------------
@@ -167,7 +169,7 @@ void test_mini_string(void) {
   / correctly handles buffer sizes and input limits.
   */
   char input_buffer[20];
-  mini_printf("Please enter a string of 19 char for mini_scanf testing:\n");
+  mini_printf("Please enter a string of max 19 char for mini_scanf testing:\n");
   int chars_read = mini_scanf(input_buffer, 20);
   mini_printf("Characters read: ");
   char char_read_str[20];
@@ -175,6 +177,7 @@ void test_mini_string(void) {
   mini_printf(char_read_str);
   mini_printf("\nInput captured: ");
   mini_printf(input_buffer);
+  mini_printf("\n");
   mini_printf("\n");
 
   /*
@@ -186,9 +189,9 @@ void test_mini_string(void) {
   / input to ensure that string lengths are computed
   / correctly, with special handling for NULL.
   */
-  char test_string[] = "mini_strlen test string";
+  char test_string[] = "mini_strlen test string"; // 23 char
   int len = mini_strlen(test_string);
-  mini_printf("Length of test string: ");
+  mini_printf("Length of mini_strlen test string (should be 23) : ");
   char len_str[20];
   mini_itoa(len, len_str);
   mini_printf(len_str);
@@ -199,6 +202,7 @@ void test_mini_string(void) {
   mini_itoa(len, len_str);
   mini_printf(len_str);
   mini_printf("\n");
+  mini_printf("\n");
 
   /*
   /-------------------------------------------------
@@ -208,7 +212,7 @@ void test_mini_string(void) {
   / Copy a string using mini_strcpy and verify that
   / the destination buffer contains the correct copy.
   */
-  char src[] = "mini_strcpy source string";
+  char src[] = "mini_strcpy source string"; // 25 char
   char dest[1024];
   int copied_chars = mini_strcpy(dest, src);
   mini_printf("Copied ");
@@ -217,6 +221,7 @@ void test_mini_string(void) {
   mini_printf(copied_str);
   mini_printf(" characters: ");
   mini_printf(dest);
+  mini_printf("\n");
   mini_printf("\n");
 
   /*
@@ -269,6 +274,7 @@ void test_mini_string(void) {
   mini_itoa(cmp_result, cmp_result_str);
   mini_printf(cmp_result_str);
   mini_printf("\n");
+  mini_printf("\n");
 
   /*
   /-------------------------------------------------
@@ -281,6 +287,7 @@ void test_mini_string(void) {
   */
   errno = EIO; // Set error to "Input/output error"
   mini_perror("Test mini_perror output");
+  mini_printf("\n");
 
   /*
   /-------------------------------------------------
@@ -305,6 +312,7 @@ void test_mini_string(void) {
   mini_printf("Integer 0 converted to string: ");
   mini_printf(buffer);
   mini_printf("\n");
+  mini_printf("\n");
 
   /*
   /-------------------------------------------------
@@ -317,6 +325,8 @@ void test_mini_string(void) {
   mini_printf("Final message before mini_exit_printf, should be printed even "
               "without \\n");
   mini_exit_printf();
+
+  mini_printf("\n\n");
 
   mini_printf("All tests for mini_io and mini_string completed\n");
 }

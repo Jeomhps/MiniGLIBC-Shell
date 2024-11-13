@@ -34,7 +34,7 @@ To fix this, buffers need to be flushed when the program exits, using functions 
 
 ![mini_printf with flushing](images/printf_with_flush.png)
 
-### Question 21:
+### Question 20:
 **What happens if the number of characters entered equals the buffer size? Propose and implement a solution.**
 
 If the number of characters entered equals or exceeds the buffer size, excess characters remain in the input stream and may be displayed later or cause issues such as in this screenshot.
@@ -46,6 +46,10 @@ To fix this, I read and discard remaining characters until a newline is encounte
 ![Fixed mini_scanf](images/working_scanf.png)
 
 Keep in mind that in both screenshots, I do a `mini_scanf` then `mini_printf` what `mini_scanf` has read, explaining why we see what the user entered two times with a cropped part (the remaining characters).
+
+### Question 22:
+
+The three function `mini_strlen`, `mini_strcpy` and `mini_strcmp` are really prone to buffer onverflow, to fix this we have to implement several verification especially for null string in any of those (which is a special case).
 
 ### Question 31:
 **What happens if the program terminates when the write buffer of a file isn’t full?**

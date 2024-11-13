@@ -37,7 +37,16 @@ To fix this, buffers need to be flushed when the program exits, using functions 
 ### Question 21:
 **What happens if the number of characters entered equals the buffer size? Propose and implement a solution.**
 
-If the number of characters entered equals or exceeds the buffer size, excess characters remain in the input stream and may be displayed later or cause issues. To fix this, you can read and discard remaining characters until a newline is encountered.
+If the number of characters entered equals or exceeds the buffer size, excess characters remain in the input stream and may be displayed later or cause issues such as in this screenshot.
+
+![Non working mini_scanf](images/non_working_scanf.png)
+
+To fix this, you can read and discard remaining characters until a newline is encountered the such as in this screenshot.
+
+
+![Fixed mini_scanf](images/working_scanf.png)
+
+Keep in mind that in both screenshots, I do a mini_scanf then mini_printf what mini_scanf has read, explaining why we see what the user entered two times with a cropped part (the remaining characters).
 
 ### Question 31:
 **What happens if the program terminates when the write buffer isn’t full?**

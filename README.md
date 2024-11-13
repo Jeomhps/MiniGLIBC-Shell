@@ -54,9 +54,34 @@ If the program ends without a full write buffer, the data may not be written to 
 
 ## References :
 
-### mini_calloc (Exercise 4) :
+Here are some of the most useful references I relied on throughout this project.
+
+### Inspiration for coding style : 
+
+- https://www.cas.mcmaster.ca/~carette/SE3M04/2004/slides/CCodingStyle.html
+
+### mini_calloc references (Exercise 4) :
 
 - https://www.youtube.com/watch?v=NDKArv9WAlQ
 - https://youtu.be/XV5sRaSVtXQ?t=179
 - https://www.youtube.com/watch?v=HUXS5mo738w (Relevant information at 2:32, ((void *)- 1) )
 - https://www.youtube.com/watch?v=vEXRpiI4Dhk
+
+### mini_exit references : 
+
+- https://stackoverflow.com/questions/5422831/what-is-the-difference-between-using-exit-exit-in-a-conventional-linux-fo
+
+### mini_free : 
+
+- https://www.quora.com/How-does-the-free-function-work
+
+### Inspiration and references for mini_string functions :
+
+- https://github.com/zephyrproject-rtos/zephyr/blob/main/lib/libc/minimal/source/string/string.c
+- https://www.reddit.com/r/cprogramming/comments/195fe0l/read_and_extra_characters_from_stdin/
+- https://www.geeksforgeeks.org/reverse-string-in-c/
+
+### Linked list related :
+
+- https://www.geeksforgeeks.org/insertion-in-linked-list/
+- https://openclassrooms.com/fr/courses/19980-apprenez-a-programmer-en-c/19733-stockez-les-donnees-avec-les-listes-chainees

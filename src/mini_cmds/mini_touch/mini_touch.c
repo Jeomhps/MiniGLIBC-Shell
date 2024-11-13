@@ -1,4 +1,4 @@
-#include "../mini_glibc/mini_lib.h"
+#include "../../mini_glibc/mini_lib.h"
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
@@ -10,11 +10,15 @@ int main(int argc, char *argv[]) {
 
   char *filename = argv[1];
   MYFILE *file = mini_fopen(filename, 'w');
-  if (file == NULL)
+  if (file == NULL) {
+    mini_perror("Error creating the file");
     return 1;
+  }
 
-  if (mini_fclose(file) == -1)
+  if (mini_fclose(file) == -1) {
+    mini_perror("Error closing the file");
     return 1;
+  }
 
   return 0;
 }

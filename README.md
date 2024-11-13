@@ -50,7 +50,7 @@ Keep in mind that in both screenshots, I do a `mini_scanf` then `mini_printf` wh
 ### Question 31:
 **What happens if the program terminates when the write buffer of a file isn’t full?**
 
-If the program ends without a full write buffer, the data may not be written to the file. To prevent this, I flush all open file buffers during `mini_exit` by maintaining a list of open files and ensuring they are properly flushed before program termination. This issue is sensibly the same issue as for mini_printf, therefor the solution uses exactly the same solution than `mini_printf`, though since there are several file with several different buffers, I traverse a linked list of file and for each one of them I flush the write buffer in case it is not emptied yet.
+If the program ends without a full write buffer, the data may not be written to the file. To prevent this, I flush all open file buffers during `mini_exit` by maintaining a list of open files and ensuring they are properly flushed before program termination. This issue is sensibly the same issue as for mini_printf.
 
 ## References :
 

@@ -25,7 +25,11 @@ Initializing the buffer with `'\0'` ensures it starts in a clean state, improvin
 ### Question 17:
 **What happens if we try to print a string without a newline using our custom functions?**
 
-If a string without a newline is printed, nothing is displayed because output occurs only when a newline is encountered. To fix this, buffers need to be flushed when the program exits, using functions like `mini_exit` to ensure all data is outputted.
+If a string without a newline is printed, nothing is displayed because output occurs only when a newline is encountered. In this screenshot, we use the `strace` utility to analyze the executable, confirming that the `write` function is never invoked since there is no `\n` nor any flush.
+
+![mini_printf without flushing](images/printf_without_flush.png)
+
+To fix this, buffers need to be flushed when the program exits, using functions like `mini_exit` to ensure all data is outputted.
 
 ### Question 21:
 **What happens if the number of characters entered equals the buffer size? Propose and implement a solution.**

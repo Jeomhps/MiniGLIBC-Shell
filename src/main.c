@@ -4,7 +4,10 @@
 #include "mini_lib.h"
 
 void test_mini_memory(void) {
-  mini_printf("Testing mini_memory functions with comprehensive checks...\n\n");
+
+  mini_printf("\n/-------------------------------------------------\n");
+  mini_printf("/       Test mini_memory\n");
+  mini_printf("/-------------------------------------------------\n\n");
 
   /*
   /-------------------------------------------------
@@ -127,8 +130,10 @@ void test_mini_memory(void) {
 }
 
 void test_mini_string(void) {
-  mini_printf("Testing mini_io and mini_string functions...\n");
-  mini_printf("\n");
+
+  mini_printf("\n/-------------------------------------------------\n");
+  mini_printf("/       Test mini_string\n");
+  mini_printf("/-------------------------------------------------\n\n");
 
   /*
   /-------------------------------------------------
@@ -315,7 +320,9 @@ void test_mini_string(void) {
 }
 
 void test_mini_io2(void) {
-  mini_printf("Testing mini_io functions with comprehensive checks...\n\n");
+  mini_printf("\n/-------------------------------------------------\n");
+  mini_printf("/       Test mini_io\n");
+  mini_printf("/-------------------------------------------------\n\n");
 
   /*
   /-------------------------------------------------
@@ -455,11 +462,13 @@ void test_mini_io2(void) {
   mini_io_exit();
 
   mini_printf("mini_io_exit successfully cleaned up resources\n");
+  mini_printf("\nAll tests for mini_io completed\n");
 }
 
 int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
+  mini_printf("\nStarting tests...\n");
 
   test_mini_memory();
 
@@ -470,6 +479,8 @@ int main(int argc, char *argv[]) {
   mini_printf("\n");
 
   test_mini_io2();
+
+  mini_printf("\n");
 
   mini_exit(0);
 }

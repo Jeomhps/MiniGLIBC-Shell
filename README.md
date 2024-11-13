@@ -83,7 +83,7 @@ Here are some of the most useful references I relied on throughout this project.
 
 ### mini_io :
 
-Most of mini_io has been coded relying on the glibc documentation and the previous knowledge gathered by the other references.
+Most of mini_io has been coded relying on the glibc documentation and the previous knowledge gathered in the other references.
 
 ### Linked list related :
 

@@ -189,17 +189,15 @@ int mini_fflush(MYFILE *file) {
     return -1;
   }
 
-  if (file->buffer_write == NULL) {
-    errno = ENOMEM;
-    return -1;
-  }
+  int write_result = 0;
 
-  int write_result = write(file->fd, file->buffer_write, file->ind_write);
-  if (write_result == -1) {
-    return -1;
+  if (file->buffer_write != NULL) {
+    write_result = write(file->fd, file->buffer_write, file->ind_write);
+    if (write_result == -1) {
+      return -1;
+    }
+    file->ind_write = 0;
   }
-
-  file->ind_write = 0;
 
   return write_result;
 }

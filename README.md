@@ -41,17 +41,16 @@ If the number of characters entered equals or exceeds the buffer size, excess ch
 
 ![Non working mini_scanf](images/non_working_scanf.png)
 
-To fix this, you can read and discard remaining characters until a newline is encountered the such as in this screenshot.
-
+To fix this, I read and discard remaining characters until a newline is encountered the such as in this screenshot.
 
 ![Fixed mini_scanf](images/working_scanf.png)
 
-Keep in mind that in both screenshots, I do a mini_scanf then mini_printf what mini_scanf has read, explaining why we see what the user entered two times with a cropped part (the remaining characters).
+Keep in mind that in both screenshots, I do a `mini_scanf` then `mini_printf` what `mini_scanf` has read, explaining why we see what the user entered two times with a cropped part (the remaining characters).
 
 ### Question 31:
-**What happens if the program terminates when the write buffer isn’t full?**
+**What happens if the program terminates when the write buffer of a file isn’t full?**
 
-If the program ends without a full write buffer, the data may not be written to the file. To prevent this, flush all open file buffers during `mini_exit` by maintaining a list of open files and ensuring they are properly flushed before program termination.
+If the program ends without a full write buffer, the data may not be written to the file. To prevent this, I flush all open file buffers during `mini_exit` by maintaining a list of open files and ensuring they are properly flushed before program termination. This issue is sensibly the same issue as for mini_printf, therefor the solution uses exactly the same solution than `mini_printf`, though since there are several file with several different buffers, I traverse a linked list of file and for each one of them I flush the write buffer in case it is not emptied yet.
 
 ## References :
 

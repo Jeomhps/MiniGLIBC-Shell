@@ -23,7 +23,68 @@ typedef struct MYFILE_NODE {
 // Global list of open MYFILE objects
 MYFILE_NODE *myFileList = NULL;
 
-int add_file_to_list(MYFILE *file);
+/*
+ * add_file_to_list - Adds a MYFILE object to the global list of open files.
+ *
+ * @file: Pointer to the MYFILE object to add.
+ *
+ * Adds a new node containing the MYFILE object to the global list `myFileList`.
+ *
+ * Returns: 42 on success, 0 on failure.
+ */
+int add_file_to_list(MYFILE *file) {
+  MYFILE_NODE *new_node = (MYFILE_NODE *)mini_calloc(sizeof(MYFILE_NODE), 1);
+  if (new_node == NULL) {
+    return 0;
+  }
+
+  new_node->file = file;
+  new_node->next = myFileList;
+  myFileList = new_node;
+
+  return 42;
+}
+
+/*
+ * del_file_from_list - Removes a MYFILE from the global list of open files.
+ *
+ * @file: Pointer to the MYFILE object to be removed.
+ *
+ * This function traverses the global list of open files and removes the node
+ * containing the specified MYFILE object. If the file is not found, an error is
+ * returned.
+ *
+ * Returns: 42 if successful, -1 if an error occurs (e.g., if the file does not
+ * exist).
+ */
+int del_file_from_list(MYFILE *file) {
+  if (file == NULL || myFileList == NULL) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  MYFILE_NODE *current = myFileList;
+  MYFILE_NODE *previous = NULL;
+
+  while (current != NULL) {
+    if (current->file == file) {
+      if (previous == NULL) {
+        myFileList = current->next;
+      } else {
+        previous->next = current->next;
+      }
+
+      mini_free(current);
+      return 42;
+    }
+
+    previous = current;
+    current = current->next;
+  }
+
+  errno = ENOENT;
+  return -1;
+}
 
 MYFILE *mini_fopen(char *file, char mode) {
   MYFILE *myFile = (MYFILE *)mini_calloc(sizeof(MYFILE), 1);
@@ -108,17 +169,6 @@ int mini_fread(void *buffer, int size_element, int number_element,
     return -1;
   }
 
-  // Old code before deduplication :
-  //
-  // if (file->buffer_read == NULL) {
-  //   file->buffer_read = mini_calloc(1, IOBUFFER_SIZE);
-  //   if (file->buffer_read == NULL) {
-  //     return -1;
-  //   }
-  //
-  //   file->ind_read = 0;
-  // }
-
   int bToRead = size_element * number_element;
   int bRead = 0;
   char *src = (char *)file->buffer_read;
@@ -159,17 +209,6 @@ int mini_fwrite(void *buffer, int size_element, int number_element,
   if (init_buffer(&(file->buffer_write), &(file->ind_write)) == -1) {
     return -1;
   }
-
-  // Old code before deduplication :
-  //
-  // if (file->buffer_write == NULL) {
-  //   file->buffer_write = mini_calloc(1, IOBUFFER_SIZE);
-  //   if (file->buffer_write == NULL) {
-  //     return -1;
-  //   }
-  //
-  //   file->ind_write = 0;
-  // }
 
   int bToWrite = size_element * number_element;
   int bWritten = 0;
@@ -213,48 +252,6 @@ int mini_fflush(MYFILE *file) {
   }
 
   return write_result;
-}
-
-int add_file_to_list(MYFILE *file) {
-  MYFILE_NODE *new_node = (MYFILE_NODE *)mini_calloc(sizeof(MYFILE_NODE), 1);
-  if (new_node == NULL) {
-    return 0;
-  }
-
-  new_node->file = file;
-  new_node->next = myFileList;
-  myFileList = new_node;
-
-  return 42;
-}
-
-int del_file_from_list(MYFILE *file) {
-  if (file == NULL || myFileList == NULL) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  MYFILE_NODE *current = myFileList;
-  MYFILE_NODE *previous = NULL;
-
-  while (current != NULL) {
-    if (current->file == file) {
-      if (previous == NULL) {
-        myFileList = current->next;
-      } else {
-        previous->next = current->next;
-      }
-
-      mini_free(current);
-      return 42;
-    }
-
-    previous = current;
-    current = current->next;
-  }
-
-  errno = ENOENT;
-  return -1;
 }
 
 int mini_fclose(MYFILE *file) {

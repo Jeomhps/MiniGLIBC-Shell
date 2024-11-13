@@ -1,13 +1,10 @@
-#include <assert.h>
 #include <errno.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #include "mini_lib.h"
 
 void test_mini_memory(void) {
-  printf("Testing mini_memory functions with comprehensive checks...\n\n");
+  mini_printf("Testing mini_memory functions with comprehensive checks...\n\n");
 
   /*
   /-------------------------------------------------
@@ -191,18 +188,14 @@ void test_mini_string(void) {
   */
   char test_string[] = "mini_strlen test string"; // 23 char
   int len = mini_strlen(test_string);
-  mini_printf("Length of mini_strlen test string (should be 23) : ");
-  char len_str[20];
-  mini_itoa(len, len_str);
-  mini_printf(len_str);
-  mini_printf("\n");
+  if (len != 23) {
+    mini_perror("mini_strlen failed to retrieve 23 char");
+  }
 
   len = mini_strlen(NULL);
-  mini_printf("Length of NULL string: ");
-  mini_itoa(len, len_str);
-  mini_printf(len_str);
-  mini_printf("\n");
-  mini_printf("\n");
+  if (len != 0) {
+    mini_perror("Mini_strlen failed to get the length of NULL string");
+  }
 
   /*
   /-------------------------------------------------
@@ -213,6 +206,7 @@ void test_mini_string(void) {
   / the destination buffer contains the correct copy.
   */
   char src[] = "mini_strcpy source string"; // 25 char
+  mini_printf("String to copy : mini_strcpy source string \n");
   char dest[1024];
   int copied_chars = mini_strcpy(dest, src);
   mini_printf("Copied ");
@@ -251,30 +245,24 @@ void test_mini_string(void) {
   / identical, different, and NULL input strings.
   */
   int cmp_result = mini_strcmp("abc", "abc");
-  mini_printf("Comparison result for identical strings: ");
-  char cmp_result_str[20];
-  mini_itoa(cmp_result, cmp_result_str);
-  mini_printf(cmp_result_str);
-  mini_printf("\n");
+  if (cmp_result != 0) {
+    mini_perror("Strcmp failed for identical string \n");
+  }
 
   cmp_result = mini_strcmp("abc", "def");
-  mini_printf("Comparison result for different strings: ");
-  mini_itoa(cmp_result, cmp_result_str);
-  mini_printf(cmp_result_str);
-  mini_printf("\n");
+  if (cmp_result != -3) {
+    mini_perror("Strcmp failed for different string \n");
+  }
 
   cmp_result = mini_strcmp(NULL, "abc");
-  mini_printf("Comparison result for NULL and string: ");
-  mini_itoa(cmp_result, cmp_result_str);
-  mini_printf(cmp_result_str);
-  mini_printf("\n");
+  if (cmp_result != -1) {
+    mini_perror("Strcmp failed for NULL string \n");
+  }
 
   cmp_result = mini_strcmp(NULL, NULL);
-  mini_printf("Comparison result for two NULL strings: ");
-  mini_itoa(cmp_result, cmp_result_str);
-  mini_printf(cmp_result_str);
-  mini_printf("\n");
-  mini_printf("\n");
+  if (cmp_result != 0) {
+    mini_perror("Strcmp failed for two NULL string \n");
+  }
 
   /*
   /-------------------------------------------------
@@ -285,7 +273,7 @@ void test_mini_string(void) {
   / a formatted error message, including the error
   / code number.
   */
-  errno = EIO; // Set error to "Input/output error"
+  errno = 0;
   mini_perror("Test mini_perror output");
   mini_printf("\n");
 
@@ -299,20 +287,20 @@ void test_mini_string(void) {
   */
   char buffer[20];
   mini_itoa(12345, buffer);
-  mini_printf("Integer 12345 converted to string: ");
-  mini_printf(buffer);
-  mini_printf("\n");
+
+  if (mini_strcmp(buffer, "12345") != 0) {
+    mini_perror("Mini_itoa for positive integer failed");
+  }
 
   mini_itoa(-54321, buffer);
-  mini_printf("Integer -54321 converted to string: ");
-  mini_printf(buffer);
-  mini_printf("\n");
+  if (mini_strcmp(buffer, "-54321") != 0) {
+    mini_perror("Mini_itoa for negative integer failed");
+  }
 
   mini_itoa(0, buffer);
-  mini_printf("Integer 0 converted to string: ");
-  mini_printf(buffer);
-  mini_printf("\n");
-  mini_printf("\n");
+  if (mini_strcmp(buffer, "0") != 0) {
+    mini_perror("Mini_itoa for NULL integer failed");
+  }
 
   /*
   /-------------------------------------------------
@@ -328,7 +316,150 @@ void test_mini_string(void) {
 
   mini_printf("\n\n");
 
-  mini_printf("All tests for mini_io and mini_string completed\n");
+  mini_printf("All tests for mini_string completed\n");
+}
+
+void test_mini_io2(void) {
+  mini_printf("Testing mini_io functions with comprehensive checks...\n\n");
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_fopen with valid inputs
+  /-------------------------------------------------
+  /
+  / Open files in different modes and check that
+  / file descriptors are valid.
+  */
+  MYFILE *file_r = mini_fopen("tests_file/testfile_read.txt", 'r');
+  if (file_r == NULL) {
+    mini_perror("mini_fopen failed to open file in read mode");
+  }
+
+  MYFILE *file_w = mini_fopen("tests_file/testfile_write.txt", 'w');
+  if (file_w == NULL) {
+    mini_perror("mini_fopen failed to open file in write mode");
+  }
+
+  MYFILE *file_b = mini_fopen("tests_file/testfile_rw.txt", 'b');
+  if (file_b == NULL) {
+    mini_perror("mini_fopen failed to open file in read/write mode");
+  }
+
+  MYFILE *file_a = mini_fopen("tests_file/testfile_append.txt", 'a');
+  if (file_a == NULL) {
+    mini_perror("mini_fopen failed to open file in append mode");
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_fopen with invalid inputs
+  /-------------------------------------------------
+  /
+  / Open files with invalid modes and check that
+  / errno is correctly set.
+  */
+  MYFILE *file_invalid = mini_fopen("tests_file/testfile_invalid.txt", 'z');
+  if (file_invalid != NULL || errno != EINVAL) {
+    mini_perror("mini_fopen with invalid param failed \n");
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_fwrite with valid inputs
+  /-------------------------------------------------
+  /
+  / Write data to files using mini_fwrite and verify
+  / the number of elements written.
+  */
+  char write_data[] = "Hello, mini_io!";
+  int elements_written =
+      mini_fwrite(write_data, sizeof(char), sizeof(write_data) - 1, file_w);
+  if (elements_written != sizeof(write_data) - 1) {
+    mini_perror("mini_fwrite wrote incorrect number of elements");
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_fread with valid inputs
+  /-------------------------------------------------
+  /
+  / Read data from files using mini_fread and verify
+  / the number of elements read.
+  */
+  mini_fclose(file_w); // Close and reopen in read mode for reading
+  MYFILE *file_read = mini_fopen("tests_file/testfile_write.txt", 'r');
+  char read_buffer[64] = {0};
+  int elements_read =
+      mini_fread(read_buffer, sizeof(char), sizeof(write_data) - 1, file_read);
+  if (elements_read != sizeof(write_data) - 1) {
+    mini_perror("mini_fread read incorrect number of elements");
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_fgetc and mini_fputc
+  /-------------------------------------------------
+  /
+  / Write a character using mini_fputc and read it
+  / back using mini_fgetc.
+  */
+  char test_char = 'M';
+  int fputc_result = mini_fputc(file_b, test_char);
+  if (fputc_result != (unsigned char)test_char) {
+    mini_perror("mini_fputc failed to write character");
+  }
+  mini_fclose(file_b);
+
+  MYFILE *file_char = mini_fopen("tests_file/testfile_rw.txt", 'r');
+  int fgetc_result = mini_fgetc(file_char);
+  if (fgetc_result != test_char) {
+    mini_perror("mini_fgetc failed to read correct character");
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_fflush
+  /-------------------------------------------------
+  /
+  / Flush buffer contents using mini_fflush and
+  / ensure data integrity.
+  */
+  mini_fwrite(write_data, sizeof(char), sizeof(write_data) - 1, file_a);
+  if (mini_fflush(file_a) == -1) {
+    mini_perror("mini_fflush failed");
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_fclose
+  /-------------------------------------------------
+  /
+  / Close open files and verify proper cleanup.
+  */
+  if (mini_fclose(file_r) != 42) {
+    mini_perror("mini_fclose failed for read file");
+  }
+  if (mini_fclose(file_read) != 42) {
+    mini_perror("mini_fclose failed for write file");
+  }
+  if (mini_fclose(file_a) != 42) {
+    mini_perror("mini_fclose failed for append file");
+  }
+  if (mini_fclose(file_char) != 42) {
+    mini_perror("mini_fclose failed for character file");
+  }
+
+  /*
+  /-------------------------------------------------
+  /       Test mini_io_exit for cleanup
+  /-------------------------------------------------
+  /
+  / Call mini_io_exit to ensure all files are closed
+  / and buffers are freed.
+  */
+  mini_io_exit();
+
+  mini_printf("mini_io_exit successfully cleaned up resources\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -340,6 +471,10 @@ int main(int argc, char *argv[]) {
   mini_printf("\n");
 
   test_mini_string();
+
+  mini_printf("\n");
+
+  test_mini_io2();
 
   mini_exit(0);
 }

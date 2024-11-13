@@ -1,5 +1,15 @@
 # MiniGLIBC-Shell
 
+## Introduction:
+
+This project involves the development of a minimalist implementation of the GNU C Library (glibc) functions, created using low-level system calls and with a strong emphasis on proper error handling. By building essential functions such as memory allocation, string manipulation, and input/output operations, this project provides a deep understanding of how core functionalities work at the system level. The minimalist glibc is then leveraged to construct a basic shell environment with custom utility functions like `mini_cat` and others, demonstrating extended usage of the created library. This hands-on approach helps to illuminate the inner workings of the `/bin/bash` executable, offering insights into how memory management, input/output operations, and other fundamental behaviors operate in Unix-like systems.
+
+## Implementation:
+
+The implementation of this project follows a lab-driven approach, with foundational elements such as using a linked list to track allocated memory, or open files, are provided in the lab instructions. Similar to the glibc, each function acts as a "safe" wrapper for system calls; errors are typically signaled by returning -1, with `errno` set to a relevant value. This strategy simplifies error detection and troubleshooting, especially when combined with `mini_perror` to display both a descriptive error message and the associated `errno` value, making it easier to search for error causes online.
+
+The overall codebase adheres to the KISS (Keep It Stupid Simple) principle. While showcasing advanced coding techniques and concise C code can be impressive, my priority has been to maintain a high level of readability. This ensures that not only others but also I can easily comprehend, debug, and modify the code in the future. This straightforward design philosophy helps to demonstrate core concepts clearly, such as memory management and I/O handling, while building a functional and educational custom shell environment.
+
 ## Answers to questions
 
 ### Question 5:

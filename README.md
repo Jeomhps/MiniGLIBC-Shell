@@ -29,7 +29,10 @@ If a string without a newline is printed, nothing is displayed because output oc
 
 ![mini_printf without flushing](images/printf_without_flush.png)
 
-To fix this, buffers need to be flushed when the program exits, using functions like `mini_exit` to ensure all data is outputted.
+To fix this, buffers need to be flushed when the program exits, using functions like `mini_exit` to ensure all data is outputted. In this screenshot, you can see in the strace output that by adding mini_exit to the code, which implements the flush of the mini_printf buffer, the write happens effectively and the buffer are flushed before exiting, thus even without the `\n`, the last line is printed to the stdout.
+
+
+![mini_printf with flushing](images/printf_with_flush.png)
 
 ### Question 21:
 **What happens if the number of characters entered equals the buffer size? Propose and implement a solution.**

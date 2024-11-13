@@ -60,7 +60,7 @@ Here are some of the most useful references I relied on throughout this project.
 
 - https://www.cas.mcmaster.ca/~carette/SE3M04/2004/slides/CCodingStyle.html
 
-### mini_calloc references (Exercise 4) :
+### mini_calloc references :
 
 - https://www.youtube.com/watch?v=NDKArv9WAlQ
 - https://youtu.be/XV5sRaSVtXQ?t=179
@@ -80,6 +80,10 @@ Here are some of the most useful references I relied on throughout this project.
 - https://github.com/zephyrproject-rtos/zephyr/blob/main/lib/libc/minimal/source/string/string.c
 - https://www.reddit.com/r/cprogramming/comments/195fe0l/read_and_extra_characters_from_stdin/
 - https://www.geeksforgeeks.org/reverse-string-in-c/
+
+### mini_io :
+
+Most of mini_io has been coded relying on the glibc documentation and the previous knowledge gathered by the other references.
 
 ### Linked list related :
 

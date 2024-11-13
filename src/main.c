@@ -206,17 +206,12 @@ void test_mini_string(void) {
   / the destination buffer contains the correct copy.
   */
   char src[] = "mini_strcpy source string"; // 25 char
-  mini_printf("String to copy : mini_strcpy source string \n");
   char dest[1024];
   int copied_chars = mini_strcpy(dest, src);
-  mini_printf("Copied ");
-  char copied_str[20];
-  mini_itoa(copied_chars, copied_str);
-  mini_printf(copied_str);
-  mini_printf(" characters: ");
-  mini_printf(dest);
-  mini_printf("\n");
-  mini_printf("\n");
+
+  if (mini_strcmp(src, dest) != 0) {
+    mini_perror("mini_strcpy failed");
+  }
 
   /*
   /-------------------------------------------------

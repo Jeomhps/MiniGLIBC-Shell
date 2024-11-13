@@ -49,7 +49,7 @@ Keep in mind that in both screenshots, I do a `mini_scanf` then `mini_printf` wh
 
 ### Question 22:
 
-The three function `mini_strlen`, `mini_strcpy` and `mini_strcmp` are really prone to buffer onverflow, to fix this we have to implement several verification especially for null string in any of those (which is a special case).
+The three function `mini_strlen`, `mini_strcpy` and `mini_strcmp` are really prone to buffer overflow, to fix this we have to implement several verification especially for null string in any of those (which is a special case).
 
 ### Question 31:
 **What happens if the program terminates when the write buffer of a file isn’t full?**

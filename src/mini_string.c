@@ -5,8 +5,9 @@
 
 #include "mini_lib.h"
 
-#define BUF_SIZE 1024
+#define BUF_SIZE 1024 // Buffer size used for mini_printf()
 
+// Global buffer for mini_printf() and index to track buffer position.
 char *buffer = NULL;
 int ind = -1;
 

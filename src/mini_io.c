@@ -4,7 +4,7 @@
 
 #include "mini_lib.h"
 
-#define IOBUFFER_SIZE 2048
+#define IOBUFFER_SIZE 2048 // Defines the buffer size for I/O operations
 
 struct MYFILE {
   int fd;
@@ -14,11 +14,13 @@ struct MYFILE {
   int ind_write;
 };
 
+// Node structure for a linked list of MYFILE objects
 typedef struct MYFILE_NODE {
   MYFILE *file;
   struct MYFILE_NODE *next;
 } MYFILE_NODE;
 
+// Global list of open MYFILE objects
 MYFILE_NODE *myFileList = NULL;
 
 int add_file_to_list(MYFILE *file);
@@ -72,6 +74,17 @@ MYFILE *mini_fopen(char *file, char mode) {
   return myFile;
 }
 
+/*
+ * init_buffer - Initializes a buffer and index for read or write operations.
+ *
+ * @buffer: Pointer to the buffer to be initialized.
+ * @index: Pointer to the index to be initialized.
+ *
+ * This function allocates memory for a buffer if it has not been allocated
+ * already and sets the provided index to 0.
+ *
+ * Returns: 0 if successful, -1 if memory allocation fails.
+ */
 int init_buffer(void **buffer, int *index) {
   if (*buffer == NULL) {
     *buffer = mini_calloc(1, IOBUFFER_SIZE);

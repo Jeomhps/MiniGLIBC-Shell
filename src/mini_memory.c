@@ -3,6 +3,10 @@
 
 #include "mini_lib.h"
 
+/*
+ * Struct representing a memory allocation element for a custom memory
+ * management system.
+ */
 typedef struct malloc_element {
   void *memory_ptr;
   int size;
@@ -10,6 +14,7 @@ typedef struct malloc_element {
   struct malloc_element *next;
 } malloc_element;
 
+// Global variable to keep track of the list of allocated memory blocks.
 malloc_element *malloc_list = NULL;
 
 void *mini_calloc(int size_element, int number_element) {

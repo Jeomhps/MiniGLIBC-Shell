@@ -126,7 +126,11 @@ MYFILE *mini_fopen(char *file, char mode) {
     return NULL;
   }
 
-  myFile->fd = open(file, flags);
+  myFile->fd = open(file, flags, 0664);
+  // 0664 is the permission descriptor in case of a newly created
+  // 6 for owner (read + write)
+  // 6 for groupe (read + write)
+  // 4 for others (read)
   if (myFile->fd == -1) {
     mini_free(myFile);
     return NULL;

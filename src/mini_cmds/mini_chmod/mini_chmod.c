@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
     mini_exit(1);
   }
 
-  // Use mini_strtol to parse the permissions argument
   int permissions = mini_strtol(argv[1]);
   if (permissions == -1) {
     mini_printf("Invalid octal permissions\n");

@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
   }
 
   char *filename = argv[1];
-  MYFILE *file = mini_fopen(filename, 'w');
+  MYFILE *file = mini_fopen(filename, 'a');
   if (file == NULL) {
     mini_perror("Error creating the file");
     return 1;

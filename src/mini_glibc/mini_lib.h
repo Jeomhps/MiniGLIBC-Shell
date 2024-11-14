@@ -1,5 +1,7 @@
 #ifndef MINI_LIB
 
+#define NULL ((void *)0)
+
 /*
 /-------------------------------------------------
 /       Mini_memory.c

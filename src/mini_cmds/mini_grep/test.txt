@@ -1,0 +1,6 @@
+Hello, this is a test file.
+This line contains the word mini_grep.
+The quick brown fox jumps over the lazy dog.
+mini_grep is a tool to search for lines containing a word.
+Another line with no matches.
+Try searching for mini_grep.

@@ -1,6 +1,9 @@
+#include <stdio.h>
 #include <sys/errno.h>
 #include <sys/fcntl.h>
 #include <unistd.h>
+
+#include <string.h>
 
 #include "mini_lib.h"
 
@@ -179,24 +182,25 @@ int mini_fread(void *buffer, int size_element, int number_element,
   char *dest = (char *)buffer;
 
   while (bRead < bToRead) {
-    if (file->ind_read >= IOBUFFER_SIZE || file->ind_read == 0) {
+    if (file->ind_read >= IOBUFFER_SIZE - 1 || file->ind_read == 0) {
       int read_result = read(file->fd, file->buffer_read, IOBUFFER_SIZE);
       if (read_result < 0) {
         return -1;
-      } else if (read_result == 0) { // Special case where read attains EOF
-        break;
+      } else if (read_result == 0) {
+        return 0;
       }
 
       file->ind_read = 0;
     }
 
-    if (file->ind_read < IOBUFFER_SIZE) {
+    while (file->ind_read < IOBUFFER_SIZE - 1) {
       *dest = src[file->ind_read];
 
       dest++;
       file->ind_read++;
       bRead++;
     }
+    mini_memset(file->buffer_read, 0, IOBUFFER_SIZE - 1);
   }
 
   return bRead / size_element;
@@ -296,10 +300,10 @@ int mini_fgetc(MYFILE *file) {
 
   if (file->ind_read >= IOBUFFER_SIZE || file->ind_read == 0) {
     int read_result = read(file->fd, file->buffer_read, IOBUFFER_SIZE);
-    if (read_result < 0) {
+    if (read_result == -1) {
       return -1;
     } else if (read_result == 0) {
-      return -1;
+      return 0;
     }
 
     file->ind_read = 0;
